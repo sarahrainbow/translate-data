@@ -54,7 +54,7 @@ npm install
 
 
 
-### Request
+### Make a Request
 
 ```
 POST /translate
@@ -63,3 +63,51 @@ POST /translate
 Request body: array of strings e.g. 
 
 `["This is very futuristic.""DAVE:", " این خیلی آینده‌نگرانه است.."]`
+
+
+## Local Development
+
+To install the dependencies run
+
+`npm i`
+
+To run development environment on localhost:8080
+
+`npm start`
+
+Using an API emulator tool (e.g. Postman) make a POST request with the input json data in the Body field with the route `http://localhost:8080/translate` 
+
+![screenshot of post example](docs/post-example.png)
+
+
+On `SEND` this should yield the converted output in the same format as the following example:
+
+```json
+{
+    "script": [
+        {
+            "english": "This is very futuristic.",
+            "meta": "DAVE",
+            "farsi": " این خیلی آینده‌نگرانه است.."
+        },
+        {
+            "english": "Yes",
+            "meta": "MARCIE MILLER",
+            "farsi": " بله "
+        }
+    ]
+}
+```
+
+
+
+
+
+## Deployment 
+
+Preposed deployment method (not implemented):
+
+- Deploy the code to an AWS lambda function
+- Use API Gateway to make that lambda function accessible
+
+Similar to this [approach](https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html) but minus the DynamoDB element as there is no database required for this API.
