@@ -60,4 +60,6 @@ npm install
 POST /translate
 ```
 
-Parameters -> body
+Request body: array of strings e.g. 
+
+`["This is very futuristic.""DAVE:", " این خیلی آینده‌نگرانه است.."]`
