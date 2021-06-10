@@ -1,5 +1,5 @@
 import express from 'express';
-import { dataParser, data } from './dataParser.js'
+import { dataParser } from './dataParser.js'
 
 const app = express();
 const PORT = 8080;
@@ -7,10 +7,6 @@ const PORT = 8080;
 const jsonParser = express.json();
 
 app.use(jsonParser);
-
-app.get('/', jsonParser, (req, res) => {
-  res.send(dataParser(data));
-} );
 
 app.post('/translate', jsonParser, (req, res) => {
   try {

@@ -251,15 +251,12 @@ const isFarsi = (element) => {
 }
 
 const isMetadata = (element) => {
-  const firstWord = element.split(' ')[0].replace(':', ' ').replace('\"', '').replace('.', '');
+  const conditions = ['OOV', 'PTC', 'GFX', ':', 'Dave'];
+  const firstWordConditions = ['PIX', 'APP'];
+  const firstWord = element.split(' ')[0];
   if (
-    element.includes('OOV')
-    || element.includes('PTC')
-    || element.includes('GFX')
-    || element.includes(':')
-    || firstWord.includes('PIX')
-    || firstWord.includes('APP')
-    || firstWord.includes('Dave')
+    conditions.some(condition => element.includes(condition))
+    || firstWordConditions.some(condition => firstWord.includes(condition))
     || element.toUpperCase() === element)
     {
       if (!isFarsi(element) || !isFarsi(firstWord) && isEnglish(element)) return true;
