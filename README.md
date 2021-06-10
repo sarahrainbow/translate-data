@@ -106,8 +106,6 @@ To run the tests:
 npm run test
 ```
 
-
-
-
-
+## Want more?
+See documentation [here](docs/documentation).
 
