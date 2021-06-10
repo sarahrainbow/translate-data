@@ -107,5 +107,5 @@ npm run test
 ```
 
 ## Want more?
-See documentation [here](docs/documentation).
+See documentation [here](https://github.com/sarahrainbow/translate-data/blob/main/docs/documentation.md).
 
