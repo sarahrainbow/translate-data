@@ -1,3 +1,5 @@
+import { dataParser, isEnglish, isFarsi, isMetadata } from './dataParser.js'
+
 const data = [
   "﻿FARSI 975 CES 2019 ",
   "",
@@ -231,114 +233,90 @@ const data = [
   ""
 ];
 
-let script = [];
-let scriptIndex = -1;
+test('isEnglish function', () => {
+  const english = '2019 starts with the Consumer Electronics Show in Las Vegas.';
+  expect(isEnglish(english)).toBe(true);
+})
 
-const isFarsi = (element) => {
-  const cleanedElement = element.replace('!', '');
-  const farsiRegex = /^[\u0600-\u06FF\uFB8A\u067E\u0686\u06AF]+$/;
-  const words = cleanedElement.split(' ');
-  let containsFarsi = false;
-  if (words) {
-    for (let index = 0; index < words.length && !containsFarsi; index++) {
-      const word = words[index];
-      if (farsiRegex.test(word)) {
-        containsFarsi = true;
+test('isFarsi function', () => {
+  const farsi = 'دیو: آها! همینه.';
+  expect(isFarsi(farsi)).toBe(true);
+})
+
+test('isMetatadata function', () => {
+  const metadata = 'OOV:';
+  expect(isMetadata(metadata)).toBe(true);
+})
+
+test('isMetadata function returns false when given farsi', () => {
+  const input = 'خوب. خوش بگذره.';
+  expect(isMetadata(input)).toBe(false);
+})
+
+test('isMetadata function returns false when given english', () => {
+  const input = 'This is very futuristic';
+  expect(isMetadata(input)).toBe(false);
+})
+
+test('isMetadata function returns false when given farsi with symbols', () => {
+  const input = '\"چیزی که ما ساختیم در واقع دسته کاملا جدید از محتواست، چون این اولین باریه که یک چیزی در خودرو به نحو احسن کار می‌کنه.\"'
+  expect(isMetadata(input)).toBe(false);
+})
+
+test('isMetadata function returns tricky farsi', () => {
+  const input = 'نمی‌دونم اما مجموع واقعیت مجازی و دور دور زدن توی پیست مسابقه حس و حال خوبی بهم ندد.';
+  expect(isMetadata(input)).toBe(false);
+})
+
+test('element with split metadata and english output separately', () => {
+  const input = ["DAVE: “Wow. Here we go”"];
+  const output = {"script": [{"english": "Wow. Here we go", "meta": "DAVE"}]}
+  expect(dataParser(input)).toStrictEqual(output);
+})
+
+test('simple test with OOV metadata', () => {
+  const input = [
+    "OOV:",
+    "2019 starts with the Consumer Electronics Show in Las Vegas",
+    "This is where you come to see all the big new tech - the crazy new ideas, and the occasional polar bear. (PIX- polar bear) Anything to get attention, basically - which is Vegas all over.",
+    "",
+    "سال ۲۰۱۹ با نمایشگاه بین‌المللی سی ای اس در لاس‌وگاس آغاز شد",
+    "جایی که همه میان تا بزرگ‌ترین فناوری‌های تازه، ایده‌های جدید دیوانه‌وار و حتی خرس‌های قطبی رو ببینند. ",
+    "و هر چه که توجه‌ها رو به خودش جلب کنه... چیزی که اصلا ماهیت وگاسه."]
+
+  const expectedOutput = {
+    "script": [
+      {
+        "english": "2019 starts with the Consumer Electronics Show in Las Vegas. This is where you come to see all the big new tech - the crazy new ideas, and the occasional polar bear. (PIX- polar bear) Anything to get attention, basically - which is Vegas all over.",
+        "farsi": " سال ۲۰۱۹ با نمایشگاه بین‌المللی سی ای اس در لاس‌وگاس آغاز شدجایی که همه میان تا بزرگ‌ترین فناوری‌های تازه، ایده‌های جدید دیوانه‌وار و حتی خرس‌های قطبی رو ببینند. و هر چه که توجه‌ها رو به خودش جلب کنه... چیزی که اصلا ماهیت وگاسه.",
+        "meta": "OOV",
       }
-    }
-  }
-  return containsFarsi;
-}
-
-const isMetadata = (element) => {
-  const firstWord = element.split(' ')[0].replace(':', ' ').replace('\"', '').replace('.', '');
-  if (
-    element.includes('OOV')
-    || element.includes('PTC')
-    || element.includes('GFX')
-    || element.includes(':')
-    || firstWord.includes('PIX')
-    || firstWord.includes('APP')
-    || element.toUpperCase() === element)
-    {
-      if (!isFarsi(element) || !isFarsi(firstWord) && isEnglish(element)) return true;
-    }
-  return false;
-}
-
-const isEnglish = (element) => {
-  const englishRegex = /^[a-z]*$/;
-  const words = element.split(' ');
-  let containsEnglish = false;
-
-  for (let index = 0; index < words.length && !containsEnglish; index++) {
-    const word = words[index];
-    if (englishRegex.test(word) && !isFarsi(element)) {
-      containsEnglish = true;
-    }
+    ]
   }
 
-  return containsEnglish;
-}
+  expect(dataParser(input)).toStrictEqual(expectedOutput);
+});
 
-const handleMetaData = (element) => {
-  let meta = element;
-  script.push({});
-  scriptIndex ++;
-
-  if (script[scriptIndex]) {
-    if (meta.includes(':')) {
-      const sections = meta.split(':');
-      meta = sections[0];
-
-      const english = sections [1];
-      if (english) {
-        script[scriptIndex].english = english.replace(/[“”]/g, '').trim();
+test('tricky test with symbols in farsi', () => {
+  const inputData = [
+    "DAVE: “Wow. Here we go”",
+    "",
+    "دیو: آها! همینه.",
+    ""
+  ]
+  const expectedOutput = {
+    "script": [
+      {
+        "english": "Wow. Here we go",
+        "meta": "DAVE",
+        "farsi": " دیو: آها! همینه.",
       }
-    }
-    script[scriptIndex].meta = meta;
+    ]
   }
-}
+  expect(dataParser(inputData)).toStrictEqual(expectedOutput);
+})
 
-const handleEnglish = (element) => {
-  if (script[scriptIndex]) {
-    if (script[scriptIndex].english) {
-      script[scriptIndex].english += `. ${element}`;
-    }
-    else script[scriptIndex].english = element.trim();
-  }
-}
-
-const handleFarsi = (element) => {
-  if (script[scriptIndex].farsi) {
-    script[scriptIndex].farsi += element;
-  }
-  else script[scriptIndex].farsi = ` ${element.trim()}`;
-}
-
-const dataParser = (data) => {
-  script = [];
-  scriptIndex = -1;
-  data.forEach((element, i) => {
-    if (element.trim().length) {
-
-      if (isMetadata(element)) {
-        handleMetaData(element);
-      }
-
-      else if (isEnglish(element)) {
-        handleEnglish(element);
-      }
-
-      else if (isFarsi(element)) {
-        handleFarsi(element);
-      }
-    }
-  });
-  const output = {
-      script
-  };
-  return output;
-}
-
-export { isEnglish, isFarsi, isMetadata, dataParser, data };
+test('parsed data has correct number of elements', () => {
+  const scriptLength = dataParser(data).script.length;
+  expect(scriptLength).toBe(59);
+})

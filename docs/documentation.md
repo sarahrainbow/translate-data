@@ -4,7 +4,9 @@ This is a REST API created with Node JS and Express.
 
 Using Node JS alongside the Express JavaScript Framework meant being able to write backend-code in JavaScript, which is fast, well supported, and gives access to many handy npm packages.
 
-One such npm package used for this was nodemon, which was installed as a dev dependency to detect changes and restart the server during development.
+npm packages used: 
+* nodemon – installed as a dev dependency to detect changes and restart the server during development.
+* babel – to transform my test module to CommonJS 
 
 
 
