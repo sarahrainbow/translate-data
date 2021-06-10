@@ -1,11 +1,11 @@
 # translate-data
 
-An API that takes an input of translated scripts (array of strings) and outputs formatted JSON data. 
+An API that takes an input of translated scripts (array of strings) and outputs formatted JSON data.
 
 The API detects and separates out the data into:
 
 * Metadata
-* English 
+* English
 * Persian
 
 **For example**, this input data:
@@ -60,7 +60,7 @@ npm install
 POST /translate
 ```
 
-Request body: array of strings e.g. 
+Request body: array of strings e.g.
 
 `["This is very futuristic.""DAVE:", " این خیلی آینده‌نگرانه است.."]`
 
@@ -75,7 +75,7 @@ To run development environment on localhost:8080
 
 `npm start`
 
-Using an API emulator tool (e.g. Postman) make a POST request with the input json data in the Body field with the route `http://localhost:8080/translate` 
+Using an API emulator tool (e.g. Postman) make a POST request with the input json data in the Body field with the route `http://localhost:8080/translate`
 
 ![screenshot of post example](docs/post-example.png)
 
@@ -99,15 +99,15 @@ On `SEND` this should yield the converted output in the same format as the follo
 }
 ```
 
+## Testing
+
+To run the tests:
+```
+npm run test
+```
 
 
 
 
-## Deployment 
 
-Preposed deployment method (not implemented):
 
-- Deploy the code to an AWS lambda function
-- Use API Gateway to make that lambda function accessible
-
-Similar to this [approach](https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html) but minus the DynamoDB element as there is no database required for this API.

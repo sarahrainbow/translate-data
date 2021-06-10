@@ -263,7 +263,7 @@ test('isMetadata function returns false when given farsi with symbols', () => {
   expect(isMetadata(input)).toBe(false);
 })
 
-test('isMetadata function returns tricky farsi', () => {
+test('isMetadata function returns false for farsi that regex does not catch', () => {
   const input = 'نمی‌دونم اما مجموع واقعیت مجازی و دور دور زدن توی پیست مسابقه حس و حال خوبی بهم ندد.';
   expect(isMetadata(input)).toBe(false);
 })
@@ -274,7 +274,7 @@ test('element with split metadata and english output separately', () => {
   expect(dataParser(input)).toStrictEqual(output);
 })
 
-test('simple test with OOV metadata', () => {
+test('multiple elements populate all three fields correctly (metadata, english and farsi)', () => {
   const input = [
     "OOV:",
     "2019 starts with the Consumer Electronics Show in Las Vegas",
@@ -293,11 +293,10 @@ test('simple test with OOV metadata', () => {
       }
     ]
   }
-
   expect(dataParser(input)).toStrictEqual(expectedOutput);
 });
 
-test('tricky test with symbols in farsi', () => {
+test('multiple elements including compound metadata/english element outputs correctly', () => {
   const inputData = [
     "DAVE: “Wow. Here we go”",
     "",
@@ -318,5 +317,5 @@ test('tricky test with symbols in farsi', () => {
 
 test('parsed data has correct number of elements', () => {
   const scriptLength = dataParser(data).script.length;
-  expect(scriptLength).toBe(59);
+  expect(scriptLength).toBe(60);
 })

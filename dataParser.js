@@ -259,6 +259,7 @@ const isMetadata = (element) => {
     || element.includes(':')
     || firstWord.includes('PIX')
     || firstWord.includes('APP')
+    || firstWord.includes('Dave')
     || element.toUpperCase() === element)
     {
       if (!isFarsi(element) || !isFarsi(firstWord) && isEnglish(element)) return true;
