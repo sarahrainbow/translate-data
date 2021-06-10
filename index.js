@@ -1,5 +1,5 @@
 import express from 'express';
-import { dataParser } from './dataParser.js'
+import { dataParser } from './src/dataParser.js'
 
 const app = express();
 const PORT = 8080;
