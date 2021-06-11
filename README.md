@@ -1,4 +1,4 @@
-# translate-data
+# Translate Data API
 
 An API that takes an input of translated scripts (array of strings) and outputs formatted JSON data.
 
@@ -75,7 +75,7 @@ To run development environment on localhost:8080
 
 `npm start`
 
-Using an API emulator tool (e.g. Postman) make a POST request with the input json data in the Body field with the route `http://localhost:8080/translate`
+Using an API testing tool (e.g. Postman) make a POST request with the input json data in the Body field with the route `http://localhost:8080/translate`
 
 ![screenshot of post example](docs/post-example.png)
 

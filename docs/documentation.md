@@ -5,14 +5,14 @@ This is a REST API created with Node JS and Express.
 
 Using Node JS alongside the Express JavaScript Framework meant being able to write backend-code in JavaScript, which is fast, well supported, and gives access to many handy npm packages.
 
-npm packages used: 
+npm packages used:
 * nodemon – installed as a dev dependency to detect changes and restart the server during development.
-* jest - JavaScript Testing Framework
-* babel – to transform my test module to CommonJS 
+* jest - the JavaScript Testing Framework used for tests
+* babel – to transform the test module to CommonJS
 
 ## Testing
-Employed TDD techniques to ensure that my dataParser and language detection functions were working correctly.
-## Deployment 
+TDD techniques were employed to ensure that the functions within the dataParser were working correctly.
+## Deployment
 
 Preposed deployment method (not implemented):
 
@@ -25,14 +25,23 @@ Similar to this [approach](https://docs.aws.amazon.com/lambda/latest/dg/services
 
 * More sophisticated method of defining metadata
 
-    * This was the biggest struggle when developing the API due to the inconsistent nature of input data. 
+    * This was the biggest struggle when developing the API due to the inconsistent nature of input data.
 
-  * Possible future feature: API accepts a metadata key words parameter which could make this more versatile for other scripts e.g. presenter's names, notes for voice-over artists e.g. OOT, PTC
+    * It seems very likely that other input data would have different conditions for metadata
 
+    * A potential fix for this could look something like this:
 
-* Support other languages
+     ```
+  const genericConditions = ['OOV', 'PTC', 'GFX', ':'];
+  const uniqueConditions = ['Dave', 'Nick'];
+  ```
+  * when exposed to more input data, a list of generic metadata flags could be generated e.g. notes for voice-over artists
 
-  * Currently only supports Persian translations. 
+  * API accepts a `metadata-key-words` parameter which populates the genericConditions variable, so the user can specify unique metadata flags for that script e.g. presenter's names
+
+* Support for other languages
+
+  * Currently only supports Persian translations.
 
   * Possible future feature: API accepts a language parameter which the API could use to properly parse the translated fields of the output.
 
